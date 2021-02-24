@@ -24,8 +24,8 @@ class CommentForm extends Component {
     }
 
     handleSubmit(values) {
-        console.log("current state: " + JSON.stringify(values));
-        alert("Your comment is: "+JSON.stringify(values));
+        this.toggleModal();
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment)
     }
 
     render() {
@@ -39,9 +39,9 @@ class CommentForm extends Component {
                     <ModalBody>
                         <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
                             <Row className="form-group">
-                                <Label htmlFor="contactType" md={2}>Rating</Label>
+                                <Label htmlFor="rating" md={2}>Rating</Label>
                                 <Col md={2}>
-                                    <Control.select model=".contactType" name="contactType" 
+                                    <Control.select model=".rating" name="rating" 
                                         className="form-control">
                                         <option></option>
                                         <option>1</option>
