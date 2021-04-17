@@ -1,15 +1,10 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 function About(props) {
-
-    const leaders = props.leaders.map((leader) => {
-        return (
-            <p>Leader {leader.name}</p>
-        );
-    });
-
     return(
         <div className="container">
             <div className="row">
@@ -66,7 +61,7 @@ function About(props) {
                 </div>
                 <div className="col-12">
                     <Media list>
-                        <RenderLeader leaders={props.leaders}/>
+                        <RenderLeader leaders={props.leaders.leaders} isLoading={props.leaders.isLoading} errMess={props.leaders.errMess}/>
                     </Media>
                 </div>
             </div>
@@ -74,25 +69,45 @@ function About(props) {
     );
 }
 
-function RenderLeader({leaders}) {
-    return(
-        <div className="col-12 mt-5">
-            {leaders.map((leader) => {
-                return(
-                    <Media key={leader.id} tag="li">
-                        <Media left-middle>
-                            <Media object src={leader.image}/>
+function RenderLeader({leaders, isLoading, errMess}) {
+    if (isLoading){
+        return(
+            <div className="container">
+                <div className="row">
+                    <Loading/>
+                </div>
+            </div>
+        );
+    }
+
+    else if (errMess){
+        return(
+            <div className="container">
+                <div className="row">
+                    <h4>{errMess}</h4>
+                </div>
+            </div>
+        );
+    }
+    else 
+        return(
+            <div className="col-12 mt-5">
+                {leaders.map((leader) => {
+                    return(
+                        <Media key={leader.id} tag="li">
+                            <Media left-middle>
+                                <Media object src={baseUrl + leader.image}/>
+                            </Media>
+                            <Media body className="ml-5">
+                                <Media heading>{leader.name}</Media>
+                                <p>{leader.designation}</p>
+                                <p>{leader.description}</p>
+                                <hr/>
+                            </Media>
                         </Media>
-                        <Media body className="ml-5">
-                            <Media heading>{leader.name}</Media>
-                            <p>{leader.designation}</p>
-                            <p>{leader.description}</p>
-                            <hr/>
-                        </Media>
-                    </Media>
-                );
-            })}
-        </div>
-    );
+                    );
+                })}
+            </div>
+        );
 }
 export default About;    
